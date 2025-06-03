@@ -42,9 +42,8 @@ class MovieService {
 
   static Future<void> deleteMovie(String id) async {
     final response = await http.delete(Uri.parse('$baseUrl/$id'));
-
-    if (response.statusCode != 200) {
-      throw Exception('Gagal menghapus movie');
+    if (response.statusCode != 200 && response.statusCode != 204) {
+      throw Exception('Failed to delete movie');
     }
   }
 }

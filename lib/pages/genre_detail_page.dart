@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/movie.dart';
+import 'movie_detail_page.dart'; // jangan lupa import ini ya
 
 class GenreDetailPage extends StatelessWidget {
   final String genre;
@@ -17,38 +18,49 @@ class GenreDetailPage extends StatelessWidget {
         separatorBuilder: (_, __) => SizedBox(height: 12),
         itemBuilder: (context, index) {
           final movie = movies[index];
-          return Row(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Image.network(
-                  movie.imageUrl,
-                  height: 100,
-                  width: 70,
-                  fit: BoxFit.cover,
+          return InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => DetailPage(movie: movie),
                 ),
-              ),
-              SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      movie.title,
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: 4),
-                    Text("${movie.year}", style: TextStyle(color: Colors.grey)),
-                    SizedBox(height: 4),
-                    Text(
-                      movie.description,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    )
-                  ],
+              );
+            },
+            borderRadius: BorderRadius.circular(8), // biar animasi ripple nya matching
+            child: Row(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.network(
+                    movie.imageUrl,
+                    height: 100,
+                    width: 70,
+                    fit: BoxFit.cover,
+                  ),
                 ),
-              )
-            ],
+                SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        movie.title,
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(height: 4),
+                      Text("${movie.year}", style: TextStyle(color: Colors.grey)),
+                      SizedBox(height: 4),
+                      Text(
+                        movie.description,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
           );
         },
       ),

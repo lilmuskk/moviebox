@@ -27,7 +27,8 @@ class _MovieFormPageState extends State<MovieFormPage> {
     'Romance',
     'Fantasy',
     'Thriller',
-    'Adult'
+    'Adult',
+    'Musical'
   ];
 
   @override

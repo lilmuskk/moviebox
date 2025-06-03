@@ -3,8 +3,11 @@ import '../pages/home_page.dart';
 import '../pages/favorite_page.dart';
 import '../pages/main_navigation.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../services/favorite_service.dart'; // jangan lupa import ini
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await FavoriteService().init();
   runApp(const MovieApp());
 }
 

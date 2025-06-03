@@ -1,28 +1,47 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FavoriteService {
-  static const _key = 'favorite_movie_ids';
+  static final FavoriteService _instance = FavoriteService._internal();
+  factory FavoriteService() => _instance;
+  FavoriteService._internal();
 
-  static Future<List<String>> getFavorites() async {
+  static const _prefKey = 'favorite_movies';
+
+  List<String> _favoriteIds = [];
+
+  Future<void> init() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getStringList(_key) ?? [];
+    _favoriteIds = prefs.getStringList(_prefKey) ?? [];
   }
 
-  static Future<void> toggleFavorite(String movieId) async {
-    final prefs = await SharedPreferences.getInstance();
-    final favs = prefs.getStringList(_key) ?? [];
+  List<String> get favoriteIds => _favoriteIds;
 
-    if (favs.contains(movieId)) {
-      favs.remove(movieId);
-    } else {
-      favs.add(movieId);
+  bool isFavorite(String id) {
+    return _favoriteIds.contains(id);
+  }
+
+  Future<void> addFavorite(String id) async {
+    if (!_favoriteIds.contains(id)) {
+      _favoriteIds.add(id);
+      await _save();
     }
-
-    await prefs.setStringList(_key, favs);
   }
 
-  static Future<bool> isFavorite(String movieId) async {
-    final favs = await getFavorites();
-    return favs.contains(movieId);
+  Future<void> removeFavorite(String id) async {
+    _favoriteIds.remove(id);
+    await _save();
+  }
+
+  Future<void> toggleFavorite(String id) async {
+    if (isFavorite(id)) {
+      await removeFavorite(id);
+    } else {
+      await addFavorite(id);
+    }
+  }
+
+  Future<void> _save() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList(_prefKey, _favoriteIds);
   }
 }
